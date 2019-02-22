@@ -29,7 +29,6 @@ const (
 
 func defaultConfig() configuration {
 	var config configuration
-	// TODO: make default config, let environment vars change the config
 
 	config.ListenPort = "9999"
 	config.MqttServerAddress = "tcp://127.0.0.1"
