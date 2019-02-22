@@ -1,0 +1,105 @@
+package dataformat
+
+import (
+	"errors"
+)
+
+const (
+	ready          uint16 = 0x0000
+	generating     uint16 = 0x0003
+	noGrid         uint16 = 0x1015
+	ExpectedLength int    = 103
+	packetLength   byte   = 89
+)
+
+type InverterData struct {
+	Temperature float64
+	Vdc1        float64
+	Vdc2        float64
+	Adc1        float64
+	Adc2        float64
+	Aac         float64
+	Vac         float64
+	Fac         float64
+	PNow        uint16
+	Yesterday   float64
+	Today       float64
+	Total       float64
+	Month       uint16
+	LastMonth   uint16
+	Status      string
+}
+
+type RawInverterData struct {
+	Start        byte // always 0x68
+	Length       byte // length of the data (from command to checksum)
+	ControlCode  [2]byte
+	Id1          [4]byte
+	Id2          [4]byte
+	Command      byte
+	ProtocolType [2]byte
+	Serial       [16]byte
+	Temperature  uint16
+	Vdc1         uint16
+	Vdc2         uint16
+	_            [2]byte
+	Adc1         uint16
+	Adc2         uint16
+	_            [2]byte
+	Aac          uint16
+	_            [4]byte
+	Vac          uint16
+	_            [4]byte
+	Fac          uint16
+	PNow         uint16
+	_            [6]byte
+	Yesterday    uint16
+	Today        uint16
+	Total        uint32
+	_            [4]byte
+	Status       uint16
+	_            [6]byte
+	Month        uint16
+	_            [2]byte
+	LastMonth    uint16
+	_            [8]byte
+	Checksum     byte // sum of all bytes in data (between temperature and here)
+	End          byte // always 0x16
+}
+
+func statusToString(status uint16) string {
+	switch status {
+	case ready:
+		return "Ready"
+	case generating:
+		return "Generating"
+	case noGrid:
+		return "No grid"
+	default:
+		return "Unknown"
+	}
+}
+
+func ConvertInverterData(rawData RawInverterData) (error, InverterData) {
+	var data InverterData
+	if rawData.Length != packetLength {
+		return errors.New("Invalid packet length"), data
+	}
+	data.Temperature = float64(rawData.Temperature) / 10
+	data.Vdc1 = float64(rawData.Vdc1) / 10
+	data.Vdc2 = float64(rawData.Vdc2) / 10
+	data.Adc1 = float64(rawData.Adc1) / 10
+	data.Adc2 = float64(rawData.Adc2) / 10
+	data.Aac = float64(rawData.Aac) / 10
+	data.Vac = float64(rawData.Vac) / 10
+	data.Fac = float64(rawData.Fac) / 100
+	data.PNow = rawData.PNow
+	data.Yesterday = float64(rawData.Yesterday) / 100
+	data.Today = float64(rawData.Today) / 100
+	data.Total = float64(rawData.Total) / 10
+	data.Month = rawData.Month
+	data.LastMonth = rawData.LastMonth
+	data.Status = statusToString(rawData.Status)
+
+	return nil, data
+}
