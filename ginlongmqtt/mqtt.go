@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/binary"
 	"encoding/json"
-	"ginlong/dataformat"
+	"github.com/Mindavi/ginlong-monitor/dataformat"
 	"github.com/eclipse/paho.mqtt.golang"
 	"log"
 	"net"

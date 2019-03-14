@@ -5,7 +5,7 @@ import (
 	"encoding/binary"
 	"flag"
 	"fmt"
-	"ginlong/dataformat"
+	"github.com/Mindavi/ginlong-monitor/dataformat"
 	"io/ioutil"
 	"log"
 )
