@@ -7,6 +7,9 @@ import (
 const (
 	ready          uint16 = 0x0000
 	generating     uint16 = 0x0003
+  // other codes might be found in the link(s) below
+  // https://github.com/Crosenhain/ginlong_poller/blob/b966488e6371a93c9307268142a1ff3395a500e2/ginlong_rs485_protocol.pdf
+  // https://github.com/XtheOne/Inverter-Data-Logger/files/1967100/Solis.Three.phase.communication.protocal.pdf
 	noGrid         uint16 = 0x1015
 	ExpectedLength int    = 103
 	packetLength   byte   = 89
