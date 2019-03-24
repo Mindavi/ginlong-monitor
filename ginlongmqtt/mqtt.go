@@ -145,10 +145,10 @@ func handleRequest(conn net.Conn, client mqtt.Client, config configuration) {
 	buf := make([]byte, 512)
 	length, err := conn.Read(buf)
 	if err != nil {
-		log.Fatal(err)
+    log.Print(err)
 	}
 	if length != dataformat.ExpectedLength {
-		log.Print("Invalid length for received packet: ", length, ", expected ", dataformat.ExpectedLength)
+		log.Printf("Invalid length for received packet: %d, expected %d, %s", length, dataformat.ExpectedLength, conn.RemoteAddr().String())
 	} else {
 		go convertAndPost(buf, client, config)
 	}
