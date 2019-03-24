@@ -144,7 +144,7 @@ func handleRequest(conn net.Conn, client mqtt.Client, config configuration) {
 	buf := make([]byte, 512)
 	length, err := conn.Read(buf)
 	if err != nil {
-    log.Print(err)
+		log.Print(err)
 	}
 	if length != dataformat.ExpectedLength {
 		log.Printf("Invalid length for received packet: %d, expected %d, %s", length, dataformat.ExpectedLength, conn.RemoteAddr().String())
