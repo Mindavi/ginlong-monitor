@@ -112,7 +112,7 @@ func main() {
 	runServer(config, client)
 }
 
-func convertData(data []byte) (error, dataformat.InverterData) {
+func convertData(data []byte) (dataformat.InverterData, error) {
 	reader := bytes.NewReader(data)
 	var invData dataformat.RawInverterData
 	err := binary.Read(reader, binary.BigEndian, &invData)
@@ -133,7 +133,7 @@ func postData(data dataformat.InverterData, client mqtt.Client, config configura
 }
 
 func convertAndPost(data []byte, client mqtt.Client, config configuration) {
-	err, converted := convertData(data)
+	converted, err := convertData(data)
 	if err != nil {
 		log.Print(err.Error())
 	} else {

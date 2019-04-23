@@ -36,7 +36,7 @@ func main() {
 	fmt.Printf("Status: %#x\n", invData.Status)
 	fmt.Printf("End: %#x\n", invData.End)
 
-	newData := dataformat.ConvertInverterData(invData)
+	newData, err := dataformat.ConvertInverterData(invData)
 
 	// fmt.Printf("Header:%#x\n", invData.Header)
 	fmt.Println("Temperature:", newData.Temperature, "*C")
