@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/binary"
 	"encoding/json"
+	"fmt"
 	"github.com/Mindavi/ginlong-monitor/dataformat"
 	"github.com/eclipse/paho.mqtt.golang"
 	"log"
@@ -148,6 +149,9 @@ func handleRequest(conn net.Conn, client mqtt.Client, config configuration) {
 	}
 	if length != dataformat.ExpectedLength {
 		log.Printf("Invalid length for received packet: %d, expected %d, %s", length, dataformat.ExpectedLength, conn.RemoteAddr().String())
+		if length > 0 {
+			fmt.Printf("The invalid message: %+q\n", string(buf[0:length]))
+		}
 	} else {
 		go convertAndPost(buf, client, config)
 	}
