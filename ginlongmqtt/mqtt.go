@@ -80,6 +80,8 @@ func setupMqtt(config configuration) mqtt.Client {
 	mqtt.ERROR = log.New(os.Stdout, "", 0)
 	opts := mqtt.NewClientOptions().AddBroker(config.MqttServerAddress + ":" + config.MqttServerPort).SetClientID(config.MqttClientId)
 	opts.SetKeepAlive(30 * time.Second)
+	opts.Username = config.MqttUsername
+	opts.Password = config.MqttPassword
 
 	c := mqtt.NewClient(opts)
 	if token := c.Connect(); token.Wait() && token.Error() != nil {
