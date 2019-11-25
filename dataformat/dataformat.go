@@ -66,7 +66,7 @@ type RawInverterData struct {
 	_            [2]byte
 	LastMonth    uint16
 	_            [8]byte
-	Checksum     byte // sum of all bytes in data (probably between command and here)
+	Checksum     byte // sum of all bytes in data (from length to here, checksum) mod 256
 	End          byte // always 0x16
 }
 
