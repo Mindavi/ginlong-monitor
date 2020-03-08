@@ -34,6 +34,7 @@ func main() {
 	fmt.Printf("Protocol: %#x\n", invData.ProtocolType)
 	fmt.Printf("Serial: %s\n", invData.Serial)
 	fmt.Printf("Status: %#x\n", invData.Status)
+	fmt.Printf("Checksum: %#x\n", invData.Checksum)
 	fmt.Printf("End: %#x\n", invData.End)
 
 	newData, err := dataformat.ConvertInverterData(invData)
