@@ -2,6 +2,7 @@ package dataformat
 
 import (
 	"errors"
+	"math" // for sqrt
 )
 
 const (
@@ -97,7 +98,10 @@ func ConvertInverterData(rawData RawInverterData) (InverterData, error) {
 	data.Aac = float64(rawData.Aac) / 10
 	data.Vac = float64(rawData.Vac) / 10
 	data.Fac = float64(rawData.Fac) / 100
-	data.PNow = rawData.PNow
+	// Because this is a three-phase inverter, and the inverter only reports
+	// data from one phase, we need to multiply this with sqrt(3).
+	// That'll not be exactly correct, but at least a lot better than the incorrect value.
+	data.PNow = rawData.PNow * math.Sqrt(3)
 	data.Yesterday = float64(rawData.Yesterday) / 100
 	data.Today = float64(rawData.Today) / 100
 	data.Total = float64(rawData.Total) / 10
