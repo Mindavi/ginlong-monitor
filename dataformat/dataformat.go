@@ -101,7 +101,7 @@ func ConvertInverterData(rawData RawInverterData) (InverterData, error) {
 	// Because this is a three-phase inverter, and the inverter only reports
 	// data from one phase, we need to multiply this with sqrt(3).
 	// That'll not be exactly correct, but at least a lot better than the incorrect value.
-	data.PNow = rawData.PNow * math.Sqrt(3)
+	data.PNow = uint16(float64(rawData.PNow) * math.Sqrt(3))
 	data.Yesterday = float64(rawData.Yesterday) / 100
 	data.Today = float64(rawData.Today) / 100
 	data.Total = float64(rawData.Total) / 10
