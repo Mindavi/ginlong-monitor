@@ -84,10 +84,22 @@ func statusToString(status uint16) string {
 	}
 }
 
-func ConvertInverterData(rawData RawInverterData) (InverterData, error) {
+func VerifyChecksum(data []byte) error {
+	considered := data[1 : len(data)-2]
+	var total uint8
+	for _, val := range considered {
+		total += uint8(val)
+	}
+	if total != data[len(data)-1] {
+		return errors.New("Invalid checksum")
+	}
+	return nil
+}
+
+func ConvertInverterData(rawData RawInverterData) (*InverterData, error) {
 	var data InverterData
 	if rawData.Length != packetLength {
-		return data, errors.New("Invalid packet length")
+		return nil, errors.New("Invalid packet length")
 	}
 
 	data.Temperature = float64(rawData.Temperature) / 10
@@ -114,5 +126,5 @@ func ConvertInverterData(rawData RawInverterData) (InverterData, error) {
 		data.Status = statusToString(rawData.Status)
 	}
 
-	return data, nil
+	return &data, nil
 }

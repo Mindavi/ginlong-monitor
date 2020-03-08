@@ -115,12 +115,14 @@ func main() {
 	runServer(config, client)
 }
 
-func convertData(data []byte) (dataformat.InverterData, error) {
+func convertData(data []byte) (*dataformat.InverterData, error) {
 	reader := bytes.NewReader(data)
 	var invData dataformat.RawInverterData
-	err := binary.Read(reader, binary.BigEndian, &invData)
-	if err != nil {
-		log.Fatal("Invalid binary data", err)
+	if err := binary.Read(reader, binary.BigEndian, &invData); err != nil {
+		return nil, err
+	}
+	if err := dataformat.VerifyChecksum(data); err != nil {
+		return nil, err
 	}
 	return dataformat.ConvertInverterData(invData)
 }
@@ -140,7 +142,7 @@ func convertAndPost(data []byte, client mqtt.Client, config configuration) {
 	if err != nil {
 		log.Print(err.Error())
 	} else {
-		postData(converted, client, config)
+		postData(*converted, client, config)
 	}
 }
 
