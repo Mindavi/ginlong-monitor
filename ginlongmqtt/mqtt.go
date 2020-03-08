@@ -24,7 +24,7 @@ type configuration struct {
 }
 
 const (
-	host      = ""
+	version   = "0.1.0"
 	conn_type = "tcp"
 )
 
@@ -92,7 +92,7 @@ func setupMqtt(config configuration) mqtt.Client {
 }
 
 func runServer(config configuration, client mqtt.Client) {
-	server, err := net.Listen(conn_type, host+":"+config.ListenPort)
+	server, err := net.Listen(conn_type, ":"+config.ListenPort)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -109,6 +109,7 @@ func runServer(config configuration, client mqtt.Client) {
 }
 
 func main() {
+	fmt.Println("Ginlongmqtt version", version)
 	config := readConfig()
 	client := setupMqtt(config)
 	runServer(config, client)
