@@ -24,7 +24,7 @@ type configuration struct {
 }
 
 const (
-	version   = "0.1.0"
+	version   = "0.2.0"
 	conn_type = "tcp"
 )
 
@@ -122,7 +122,9 @@ func convertData(data []byte) (*dataformat.InverterData, error) {
 		return nil, err
 	}
 	if err := dataformat.VerifyChecksum(data); err != nil {
-		return nil, err
+		// Until checksum verification if fixed, just keep on going anyway
+		log.Println(err.Error())
+		//return nil, err
 	}
 	return dataformat.ConvertInverterData(invData)
 }
