@@ -2,6 +2,7 @@ package dataformat
 
 import (
 	"errors"
+	"fmt"
 	"math" // for sqrt
 )
 
@@ -86,12 +87,14 @@ func statusToString(status uint16) string {
 
 func VerifyChecksum(data []byte) error {
 	considered := data[1 : len(data)-2]
-	var total uint8
+	var total uint8 = 0
 	for _, val := range considered {
 		total += uint8(val)
 	}
-	if total != data[len(data)-1] {
-		return errors.New("Invalid checksum")
+	checksum := data[len(data)-2]
+	if total != checksum {
+		err := fmt.Sprintf("Invalid checksum: %#x, expected %#x", total, checksum)
+		return errors.New(err)
 	}
 	return nil
 }
