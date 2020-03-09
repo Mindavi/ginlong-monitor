@@ -25,6 +25,11 @@ func main() {
 		log.Fatal("Invalid binary data", err)
 	}
 
+	err = dataformat.VerifyChecksum(data)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
 	fmt.Printf("Start: %#x\n", invData.Start)
 	fmt.Printf("Length: %#x\n", invData.Length)
 	fmt.Printf("Control code: %#x\n", invData.ControlCode)
