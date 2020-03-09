@@ -86,6 +86,9 @@ func statusToString(status uint16) string {
 }
 
 func VerifyChecksum(data []byte) error {
+	if len(data) != ExpectedLength {
+		return errors.New("VerifyChecksum: Invalid packet length")
+	}
 	considered := data[1 : len(data)-2]
 	var total uint8 = 0
 	for _, val := range considered {
@@ -102,7 +105,7 @@ func VerifyChecksum(data []byte) error {
 func ConvertInverterData(rawData RawInverterData) (*InverterData, error) {
 	var data InverterData
 	if rawData.Length != packetLength {
-		return nil, errors.New("Invalid packet length")
+		return nil, errors.New("ConvertInverterData: Invalid packet length")
 	}
 
 	data.Temperature = float64(rawData.Temperature) / 10

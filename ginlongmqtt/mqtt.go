@@ -160,7 +160,7 @@ func handleRequest(conn net.Conn, client mqtt.Client, config configuration) {
 			fmt.Printf("The invalid message: %+q\n", string(buf[0:length]))
 		}
 	} else {
-		go convertAndPost(buf, client, config)
+		go convertAndPost(buf[0:length], client, config)
 	}
 	conn.Close()
 }
